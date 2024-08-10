@@ -1,0 +1,91 @@
+class Contact:
+    def __init__(self, name, phone, email, address):
+        self.name = name
+        self.phone = phone
+        self.email = email
+        self.address = address
+
+class ContactManager:
+    def __init__(self):
+        self.contacts = []
+
+    def add_contact(self, name, phone, email, address):
+        new_contact = Contact(name, phone, email, address)
+        self.contacts.append(new_contact)
+        print(f"Contact '{name}' added successfully.")
+
+    def view_contacts(self):
+        if not self.contacts:
+            print("No contacts available.")
+            return
+        print("\nContact List:")
+        for i, contact in enumerate(self.contacts, 1):
+            print(f"{i}. {contact.name} - {contact.phone}")
+
+    def search_contact(self, search_term):
+        found_contacts = [c for c in self.contacts if search_term.lower() in c.name.lower() or search_term in c.phone]
+        if found_contacts:
+            print("\nSearch Results:")
+            for contact in found_contacts:
+                self.display_contact_details(contact)
+        else:
+            print(f"No contacts found for '{search_term}'.")
+
+    def update_contact(self, search_term):
+        for contact in self.contacts:
+            if search_term.lower() in contact.name.lower() or search_term in contact.phone:
+                print(f"Updating contact '{contact.name}'")
+                contact.name = input("Enter new name (leave blank to keep current): ") or contact.name
+                contact.phone = input("Enter new phone number (leave blank to keep current): ") or contact.phone
+                contact.email = input("Enter new email (leave blank to keep current): ") or contact.email
+                contact.address = input("Enter new address (leave blank to keep current): ") or contact.address
+                print(f"Contact '{contact.name}' updated successfully.")
+                return
+        print(f"No contact found with name or phone number '{search_term}'.")
+
+    def delete_contact(self, search_term):
+        for i, contact in enumerate(self.contacts):
+            if search_term.lower() in contact.name.lower() or search_term in contact.phone:
+                del self.contacts[i]
+                print(f"Contact '{contact.name}' deleted successfully.")
+                return
+        print(f"No contact found with name or phone number '{search_term}'.")
+
+    def display_contact_details(self, contact):
+        print(f"\nName: {contact.name}")
+        print(f"Phone: {contact.phone}")
+        print(f"Email: {contact.email}")
+        print(f"Address: {contact.address}")
+
+    def run(self):
+        print("Welcome to the Contact Management System!")
+        while True:
+            print("\nOptions: 1. Add Contact  2. View Contacts  3. Search Contact  4. Update Contact  5. Delete Contact  6. Exit")
+            choice = input("Enter your choice: ")
+
+            if choice == "1":
+                name = input("Enter name: ")
+                phone = input("Enter phone number: ")
+                email = input("Enter email: ")
+                address = input("Enter address: ")
+                self.add_contact(name, phone, email, address)
+            elif choice == "2":
+                self.view_contacts()
+            elif choice == "3":
+                search_term = input("Enter name or phone number to search: ")
+                self.search_contact(search_term)
+            elif choice == "4":
+                search_term = input("Enter name or phone number to update: ")
+                self.update_contact(search_term)
+            elif choice == "5":
+                search_term = input("Enter name or phone number to delete: ")
+                self.delete_contact(search_term)
+            elif choice == "6":
+                print("Exiting the Contact Management System. Goodbye!")
+                break
+            else:
+                print("Invalid choice. Please try again.")
+
+if __name__ == "__main__":
+    manager = ContactManager()
+    manager.run()
